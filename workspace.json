@@ -1,0 +1,131 @@
+{
+  "version": 2,
+  "projects": {
+    "powerlifting-tracker": {
+      "root": "apps/powerlifting-tracker",
+      "sourceRoot": "apps/powerlifting-tracker/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/web:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/powerlifting-tracker",
+            "index": "apps/powerlifting-tracker/src/index.html",
+            "main": "apps/powerlifting-tracker/src/main.tsx",
+            "polyfills": "apps/powerlifting-tracker/src/polyfills.ts",
+            "tsConfig": "apps/powerlifting-tracker/tsconfig.app.json",
+            "assets": [
+              "apps/powerlifting-tracker/src/favicon.ico",
+              "apps/powerlifting-tracker/src/assets"
+            ],
+            "styles": ["apps/powerlifting-tracker/src/styles.scss"],
+            "scripts": [],
+            "webpackConfig": "@nrwl/react/plugins/webpack"
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/powerlifting-tracker/src/environments/environment.ts",
+                  "with": "apps/powerlifting-tracker/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/web:dev-server",
+          "options": {
+            "buildTarget": "powerlifting-tracker:build",
+            "hmr": true
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "powerlifting-tracker:build:production",
+              "hmr": false
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": [
+              "apps/powerlifting-tracker/**/*.{ts,tsx,js,jsx}"
+            ]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/powerlifting-tracker"],
+          "options": {
+            "jestConfig": "apps/powerlifting-tracker/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "powerlifting-tracker-e2e": {
+      "root": "apps/powerlifting-tracker-e2e",
+      "sourceRoot": "apps/powerlifting-tracker-e2e/src",
+      "projectType": "application",
+      "targets": {
+        "e2e": {
+          "executor": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/powerlifting-tracker-e2e/cypress.json",
+            "devServerTarget": "powerlifting-tracker:serve",
+            "tsConfig": "apps/powerlifting-tracker-e2e/tsconfig.json"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "powerlifting-tracker:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/powerlifting-tracker-e2e/**/*.{js,ts}"]
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/react"
+  },
+  "generators": {
+    "@nrwl/react": {
+      "application": {
+        "style": "scss",
+        "linter": "eslint",
+        "babel": true
+      },
+      "component": {
+        "style": "scss"
+      },
+      "library": {
+        "style": "scss",
+        "linter": "eslint"
+      }
+    }
+  },
+  "defaultProject": "powerlifting-tracker"
+}
