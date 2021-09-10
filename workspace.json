@@ -1,25 +1,76 @@
 {
   "version": 2,
   "projects": {
-    "powerlifting-tracker": {
-      "root": "apps/powerlifting-tracker",
-      "sourceRoot": "apps/powerlifting-tracker/src",
+    "backend": {
+      "root": "apps/backend",
+      "sourceRoot": "apps/backend/src",
+      "projectType": "application",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/backend",
+            "main": "apps/backend/src/main.ts",
+            "tsConfig": "apps/backend/tsconfig.app.json",
+            "assets": ["apps/backend/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/backend/src/environments/environment.ts",
+                  "with": "apps/backend/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "executor": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "backend:build"
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["apps/backend/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/backend"],
+          "options": {
+            "jestConfig": "apps/backend/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "frontend": {
+      "root": "apps/frontend",
+      "sourceRoot": "apps/frontend/src",
       "projectType": "application",
       "targets": {
         "build": {
           "executor": "@nrwl/web:build",
           "outputs": ["{options.outputPath}"],
           "options": {
-            "outputPath": "dist/apps/powerlifting-tracker",
-            "index": "apps/powerlifting-tracker/src/index.html",
-            "main": "apps/powerlifting-tracker/src/main.tsx",
-            "polyfills": "apps/powerlifting-tracker/src/polyfills.ts",
-            "tsConfig": "apps/powerlifting-tracker/tsconfig.app.json",
+            "outputPath": "dist/apps/frontend",
+            "index": "apps/frontend/src/index.html",
+            "main": "apps/frontend/src/main.tsx",
+            "polyfills": "apps/frontend/src/polyfills.ts",
+            "tsConfig": "apps/frontend/tsconfig.app.json",
             "assets": [
-              "apps/powerlifting-tracker/src/favicon.ico",
-              "apps/powerlifting-tracker/src/assets"
+              "apps/frontend/src/favicon.ico",
+              "apps/frontend/src/assets"
             ],
-            "styles": ["apps/powerlifting-tracker/src/styles.scss"],
+            "styles": ["apps/frontend/src/styles.scss"],
             "scripts": [],
             "webpackConfig": "@nrwl/react/plugins/webpack"
           },
@@ -27,8 +78,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "apps/powerlifting-tracker/src/environments/environment.ts",
-                  "with": "apps/powerlifting-tracker/src/environments/environment.prod.ts"
+                  "replace": "apps/frontend/src/environments/environment.ts",
+                  "with": "apps/frontend/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -51,12 +102,13 @@
         "serve": {
           "executor": "@nrwl/web:dev-server",
           "options": {
-            "buildTarget": "powerlifting-tracker:build",
-            "hmr": true
+            "buildTarget": "frontend:build",
+            "hmr": true,
+            "proxyConfig": "apps/frontend/proxy.conf.json"
           },
           "configurations": {
             "production": {
-              "buildTarget": "powerlifting-tracker:build:production",
+              "buildTarget": "frontend:build:production",
               "hmr": false
             }
           }
@@ -65,36 +117,33 @@
           "executor": "@nrwl/linter:eslint",
           "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": [
-              "apps/powerlifting-tracker/**/*.{ts,tsx,js,jsx}"
-            ]
+            "lintFilePatterns": ["apps/frontend/**/*.{ts,tsx,js,jsx}"]
           }
         },
         "test": {
           "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/powerlifting-tracker"],
+          "outputs": ["coverage/apps/frontend"],
           "options": {
-            "jestConfig": "apps/powerlifting-tracker/jest.config.js",
+            "jestConfig": "apps/frontend/jest.config.js",
             "passWithNoTests": true
           }
         }
       }
     },
-    "powerlifting-tracker-e2e": {
-      "root": "apps/powerlifting-tracker-e2e",
-      "sourceRoot": "apps/powerlifting-tracker-e2e/src",
+    "frontend-e2e": {
+      "root": "apps/frontend-e2e",
+      "sourceRoot": "apps/frontend-e2e/src",
       "projectType": "application",
       "targets": {
         "e2e": {
           "executor": "@nrwl/cypress:cypress",
           "options": {
-            "cypressConfig": "apps/powerlifting-tracker-e2e/cypress.json",
-            "devServerTarget": "powerlifting-tracker:serve",
-            "tsConfig": "apps/powerlifting-tracker-e2e/tsconfig.json"
+            "cypressConfig": "apps/frontend-e2e/cypress.json",
+            "devServerTarget": "frontend:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "powerlifting-tracker:serve:production"
+              "devServerTarget": "frontend:serve:production"
             }
           }
         },
@@ -102,7 +151,7 @@
           "executor": "@nrwl/linter:eslint",
           "outputs": ["{options.outputFile}"],
           "options": {
-            "lintFilePatterns": ["apps/powerlifting-tracker-e2e/**/*.{js,ts}"]
+            "lintFilePatterns": ["apps/frontend-e2e/**/*.{js,ts}"]
           }
         }
       }
@@ -127,5 +176,5 @@
       }
     }
   },
-  "defaultProject": "powerlifting-tracker"
+  "defaultProject": "frontend"
 }

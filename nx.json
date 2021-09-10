@@ -27,12 +27,15 @@
     ]
   },
   "projects": {
-    "powerlifting-tracker": {
+    "backend": {
       "tags": []
     },
-    "powerlifting-tracker-e2e": {
+    "frontend": {
+      "tags": []
+    },
+    "frontend-e2e": {
       "tags": [],
-      "implicitDependencies": ["powerlifting-tracker"]
+      "implicitDependencies": ["frontend"]
     }
   }
 }
