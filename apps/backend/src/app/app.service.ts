@@ -1,17 +1,17 @@
-import { Injectable } from '@nestjs/common';
-import {Todo} from "@getstrong/dtos";
+import {Injectable} from '@nestjs/common';
+import {SetDto} from "@getstrong/dtos";
 
 @Injectable()
 export class AppService {
-  todos: Todo[] = [{ title: 'Todo 1' }, { title: 'Todo 2' }];
+  private sets: SetDto[] = [{setNumber: 0, weight: 50, reps: 4}]
 
-  getData(): Todo[] {
-    return this.todos;
+  getData(): SetDto[] {
+    return this.sets;
   }
 
-  addTodo():Todo {
-    const title = `New todo ${Math.floor(Math.random() * 1000)}`;
-    this.todos.push({title});
-    return {title};
+  updateSet(setDto: SetDto): SetDto[] {
+    const index = this.sets.findIndex((set) => set.setNumber === setDto.setNumber);
+    index < 0 ? this.sets.push(setDto): this.sets[index] = setDto;
+    return this.sets;
   }
 }

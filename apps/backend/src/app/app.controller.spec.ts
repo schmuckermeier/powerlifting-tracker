@@ -1,7 +1,7 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import {Test, TestingModule} from '@nestjs/testing';
 
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import {AppController} from './app.controller';
+import {AppService} from './app.service';
 
 describe('AppController', () => {
   let app: TestingModule;
@@ -14,11 +14,9 @@ describe('AppController', () => {
   });
 
   describe('getData', () => {
-    it('should return "Welcome to backend!"', () => {
+    it('should return list of sets', () => {
       const appController = app.get<AppController>(AppController);
-      expect(appController.getData()).toEqual({
-        message: 'Welcome to backend!',
-      });
+      expect(appController.getData()).toEqual([{"reps": 4, "setNumber": 0, "weight": 50}]);
     });
   });
 });

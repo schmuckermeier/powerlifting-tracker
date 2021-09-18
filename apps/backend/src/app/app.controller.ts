@@ -1,18 +1,19 @@
-import {Controller, Get, Post} from '@nestjs/common';
+import {Body, Controller, Get, Put} from '@nestjs/common';
 import {AppService} from './app.service';
+import {SetDto} from "@getstrong/dtos";
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {
   }
 
-  @Get('todos')
+  @Get('sets')
   getData() {
     return this.appService.getData();
   }
 
-  @Post('addTodo')
-  addTodo() {
-    return this.appService.addTodo();
+  @Put('updateSet')
+  updateSet(@Body() set: SetDto) {
+    return this.appService.updateSet(set);
   }
 }

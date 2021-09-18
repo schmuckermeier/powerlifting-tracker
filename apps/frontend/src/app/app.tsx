@@ -1,31 +1,49 @@
 import React, {useEffect, useState} from 'react';
-import {Todo} from "@getstrong/dtos";
+import {SetDto} from "@getstrong/dtos";
+import SetInputForm from "../../../../libs/ui/src/lib/set-input-form/set-input-form";
+import axios from "axios";
+
+const exerciseNames = ['Squat', 'Bench', 'Deadlift', 'Shoulder Press']
 
 const App = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [sets, setSets] = useState<SetDto[]>([]);
 
   useEffect(() => {
-    fetch('/api/todos')
-      .then((_) => _.json())
-      .then(setTodos);
+    axios.get<SetDto[]>('/api/sets')
+      .then(res => res.data)
+      .then(sets => sets.sort((a, b) => a.setNumber - b.setNumber))
+      .then(setSets);
   }, []);
 
-  function addTodo() {
-    fetch('/api/addTodo', {
-      method: 'POST',
-      body: '',
-    })
-      .then((_) => _.json())
-      .then((newTodo: Todo) => {
-        todos.forEach(todo => todo.active = false);
-        setTodos([...todos, {...newTodo, active: true}]);
+  useEffect(() => {
+    const emptySet = sets.find(set => !set.weight && !set.reps);
+    if (!emptySet) {
+      let lastSetNumber = sets.length ? sets[sets.length - 1].setNumber : -1;
+      setSets([...sets, {setNumber: ++lastSetNumber}])
+    }
+  }, [sets]);
+
+  const updateSet = (updatedSet: SetDto) => {
+    axios.put('/api/updateSet', updatedSet)
+      .then(res => res.data)
+      .then((sets: SetDto[]) => {
+        setSets(sets);
       });
+  }
+
+  const onSetChange = (updatedSet: SetDto) => {
+    const set = {
+      ...updatedSet,
+      reps: updatedSet?.reps === 0 ? undefined : updatedSet.reps,
+      weight: updatedSet?.weight === 0 ? undefined : updatedSet.weight
+    }
+    updateSet(set);
   }
 
   return (
     <div className="container mt-5">
       <div className="row mb-5">
-        <h1>Powerlifting Tracker</h1>
+        <h1 data-testid={'title'}>Powerlifting Tracker</h1>
       </div>
       <form>
 
@@ -33,32 +51,17 @@ const App = () => {
           <label htmlFor="exerciseSelect" className="col-sm-2 col-form-label">Exercise</label>
           <div className="col-sm-10">
             <select className="form-control form-control-lg col-sm-10" id="exerciseSelect">
-              <option>Squat</option>
-              <option>Bench</option>
-              <option>Deadlift</option>
-              <option>Shoulder Press</option>
+              {exerciseNames.map(name => <option key={name}>{name}</option>)}
             </select>
           </div>
         </div>
 
-        <div className="form-group row mb-5">
-          <label htmlFor="weight" className="col-2 col-form-label">Weight</label>
-          <div className="col-4">
-            <input type="number" className="form-control" id="weight" placeholder="10kg"/>
+        {sets.map((set) =>
+          <div key={set.setNumber} className="form-group row mb-5" data-testid={"set-number-" + set.setNumber}>
+            <SetInputForm {...set} updateSet={onSetChange}/>
           </div>
-
-          <label htmlFor="reps" className="col-2 col-form-label">Reps</label>
-          <div className="col-4">
-            <input type="number" className="form-control" id="reps" placeholder="5"/>
-          </div>
-        </div>
+        )}
       </form>
-
-      <div className="row">
-        <button onClick={addTodo} className="btn btn-primary col-6 offset-3">
-          Add
-        </button>
-      </div>
     </div>
   );
 };
