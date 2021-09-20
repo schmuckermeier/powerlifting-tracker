@@ -3,9 +3,11 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "serve": "nx run-many --target=serve --projects=frontend,backend --parallel",
     "start:fe": "nx serve frontend",
     "start:be": "nx serve backend",
-    "build": "nx build",
+    "build": "nx run-many --target=build --projects=frontend,backend --parallel",
+    "deploy": "nx run-many --target=deploy --projects=frontend,backend --parallel",
     "test:fe": "nx test frontend --watch",
     "test:be": "nx test backend --watch",
     "e2e": "nx e2e frontend-e2e --baseUrl=http://localhost:4200/  --watch"
