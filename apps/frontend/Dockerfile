@@ -12,3 +12,5 @@ WORKDIR /usr/share/nginx/html
 
 COPY --from=builder /app/builder/dist/apps/frontend ./
 COPY --from=builder /app/builder/apps/frontend/nginx.conf /etc/nginx/nginx.conf
+
+RUN echo "frontend is running at http://localhost:4900/"
