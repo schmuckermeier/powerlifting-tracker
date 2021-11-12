@@ -1,4 +1,4 @@
-FROM my-base-image:nx-base AS builder
+FROM getstrong/powerliftingtracker AS builder
 
 ARG NODE_ENV
 ARG BUILD_FLAG

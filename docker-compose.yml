@@ -10,7 +10,7 @@ services:
     build:
       context: ./
       cache_from:
-        - my-base-image:nx-base
+        - getstrong/powerliftingtracker
       dockerfile: ./apps/backend/Dockerfile
       args:
         NODE_ENV: "development"

@@ -10,7 +10,10 @@
     "deploy": "nx run-many --target=deploy --projects=frontend,backend --parallel",
     "test:fe": "nx test frontend --watch",
     "test:be": "nx test backend --watch",
-    "e2e": "nx e2e frontend-e2e --baseUrl=http://localhost:4200/  --watch"
+    "e2e": "nx e2e frontend-e2e --baseUrl=http://localhost:4200/  --watch",
+    "docker:baseImage": "docker build . -t getstrong/powerliftingtracker",
+    "docker:push": "docker push getstrong/powerliftingtracker",
+    "docker:up": "docker-compose up"
   },
   "private": true,
   "dependencies": {
