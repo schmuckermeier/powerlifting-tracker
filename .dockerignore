@@ -6,3 +6,6 @@ tmp
 .gitignore
 .dockerignore
 **/Dockerfile
+
+apps/frontend-e2e
+tools
