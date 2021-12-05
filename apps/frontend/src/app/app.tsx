@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {SetDto} from "@getstrong/dtos";
-import SetInputForm from "../../../../libs/ui/src/lib/set-input-form/set-input-form";
+import {SetDto, UserDto} from "@getstrong/dtos";
 import axios from "axios";
+import {SetInputForm} from "@getstrong/ui";
 
 const exerciseNames = ['Squat', 'Bench', 'Deadlift', 'Shoulder Press']
 
 const App = () => {
+  const [user, setUser] = useState<UserDto>();
   const [sets, setSets] = useState<SetDto[]>([]);
 
   useEffect(() => {
@@ -13,6 +14,12 @@ const App = () => {
       .then(res => res.data)
       .then(sets => sets.sort((a, b) => a.setNumber - b.setNumber))
       .then(setSets);
+  }, []);
+
+  useEffect(() => {
+    axios.get<UserDto>('/api/user/1')
+      .then(res => res.data)
+      .then(setUser);
   }, []);
 
   useEffect(() => {
@@ -42,9 +49,10 @@ const App = () => {
 
   return (
     <div className="container mt-5">
-      <div className="row mb-5">
+      <div className="row mb-3">
         <h1 data-testid={'title'}>Powerlifting Tracker</h1>
       </div>
+
       <form>
 
         <div className="form-group row mb-5">
@@ -62,6 +70,10 @@ const App = () => {
           </div>
         )}
       </form>
+
+      {user && <div className="row mb-5">
+        <h6 data-testid={'user'}>Logged in user: {user.firstName} {user.lastName}</h6>
+      </div>}
     </div>
   );
 };
