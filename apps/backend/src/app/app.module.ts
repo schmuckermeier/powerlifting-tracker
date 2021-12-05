@@ -10,17 +10,20 @@ import {ConfigModule, ConfigService} from "@nestjs/config";
     ConfigModule.forRoot({isGlobal: true}),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'mysql',
-        host: configService.get('DB_HOST'),
-        port: +configService.get<number>('DB_PORT'),
-        username: configService.get('DB_USER'),
-        password: configService.get('DB_PWD'),
-        database: configService.get('DB_NAME'),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
-        synchronize: configService.get<boolean>('DB_SYNCHRONIZE'),
-        autoLoadEntities: true
-      }),
+      useFactory: (configService: ConfigService) => {
+        console.log('Current db host is set to: ' + configService.get('DB_HOST'))
+        return ({
+          type: 'mysql',
+          host: configService.get('DB_HOST'),
+          port: +configService.get<number>('DB_PORT'),
+          username: configService.get('DB_USER'),
+          password: configService.get('DB_PWD'),
+          database: configService.get('DB_NAME'),
+          entities: [__dirname + '/**/*.entity{.ts,.js}'],
+          synchronize: configService.get<boolean>('DB_SYNCHRONIZE'),
+          autoLoadEntities: true
+        })
+      },
       inject: [ConfigService],
     }),
     UsersModule

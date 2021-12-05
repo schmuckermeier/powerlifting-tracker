@@ -11,6 +11,18 @@ Run `docker-compose up`
 
 To work with a local database, start docker and run `yarn start:db` which will spin up a mysql database in a docker container.
 
+## Update on AWS
+
+if libs have changed first creat new "base image" with `yarn docker:baseImage` and `yarn docker:push`
+
+then connect to EC2 instance and 
+`````
+cd powerlifting-tracker
+docker-compose down
+git pull
+docker-compose build
+docker-compose up
+`````
 
 _________
 
